@@ -33,13 +33,12 @@ export default function Login() {
         return;
       }
 
-      // Check if admin user already exists
-      const { data: profiles } = await supabase
+      // Check if any profiles exist
+      const { data: profiles, count } = await supabase
         .from('profiles')
-        .select('email')
-        .eq('email', ADMIN_EMAIL);
+        .select('*', { count: 'exact', head: true });
 
-      setShowSignup(!profiles || profiles.length === 0); // Show signup only if admin doesn't exist
+      setShowSignup(!profiles || count === 0); // Show signup only if no profiles exist
     };
     
     checkAuthAndAdmin();

@@ -34,6 +34,12 @@ interface HeroData {
   description: string;
 }
 
+interface AboutData {
+  bio: string;
+  skills: string[];
+  experience: string;
+}
+
 interface Skill {
   id: string;
   name: string;
@@ -58,6 +64,11 @@ export default function AdminProfile() {
     subheading: '',
     description: ''
   });
+  const [aboutData, setAboutData] = useState<AboutData>({
+    bio: '',
+    skills: [],
+    experience: ''
+  });
   const [skills, setSkills] = useState<Skill[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,8 +77,10 @@ export default function AdminProfile() {
   const [skillDialogOpen, setSkillDialogOpen] = useState(false);
   const [achievementDialogOpen, setAchievementDialogOpen] = useState(false);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [hasResume, setHasResume] = useState(false);
+  const [hasProfilePicture, setHasProfilePicture] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -85,6 +98,17 @@ export default function AdminProfile() {
 
       if (heroContent?.content) {
         setHeroData(heroContent.content as unknown as HeroData);
+      }
+
+      // Load about data
+      const { data: aboutContent } = await supabase
+        .from('portfolio_content')
+        .select('content')
+        .eq('section', 'about')
+        .single();
+
+      if (aboutContent?.content) {
+        setAboutData(aboutContent.content as unknown as AboutData);
       }
 
       // Load skills
@@ -113,6 +137,13 @@ export default function AdminProfile() {
         .list('', { limit: 1 });
       
       setHasResume(resumeFiles && resumeFiles.length > 0);
+
+      // Check if profile picture exists
+      const { data: profileFiles } = await supabase.storage
+        .from('profiles')
+        .list('', { limit: 1 });
+      
+      setHasProfilePicture(profileFiles && profileFiles.length > 0);
     } catch (error) {
       console.error('Error loading data:', error);
       toast({
@@ -145,6 +176,31 @@ export default function AdminProfile() {
       toast({
         title: "Error",
         description: "Failed to update hero section",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveAboutData = async () => {
+    try {
+      const { error } = await supabase
+        .from('portfolio_content')
+        .upsert({
+          section: 'about',
+          content: aboutData as any,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "About section updated successfully",
+      });
+    } catch (error) {
+      console.error('Error saving about data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update about section",
         variant: "destructive",
       });
     }
@@ -355,6 +411,55 @@ export default function AdminProfile() {
     }
   };
 
+  const handleProfilePictureUpload = async () => {
+    if (!profilePicture) return;
+
+    setUploading(true);
+    try {
+      // Delete existing profile picture if any
+      const { data: existingFiles } = await supabase.storage
+        .from('profiles')
+        .list('');
+
+      if (existingFiles && existingFiles.length > 0) {
+        for (const file of existingFiles) {
+          await supabase.storage
+            .from('profiles')
+            .remove([file.name]);
+        }
+      }
+
+      // Upload new profile picture
+      const fileExt = profilePicture.name.split('.').pop();
+      const fileName = `profile.${fileExt}`;
+      
+      const { error } = await supabase.storage
+        .from('profiles')
+        .upload(fileName, profilePicture, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (error) throw error;
+
+      setHasProfilePicture(true);
+      setProfilePicture(null);
+      toast({
+        title: "Success",
+        description: "Profile picture uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload profile picture",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -371,8 +476,9 @@ export default function AdminProfile() {
       </div>
 
       <Tabs defaultValue="hero" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="hero">Hero Section</TabsTrigger>
+          <TabsTrigger value="about">About Me</TabsTrigger>
           <TabsTrigger value="resume">Resume</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
@@ -417,6 +523,125 @@ export default function AdminProfile() {
                 <Save className="w-4 h-4 mr-2" />
                 Save Hero Section
               </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="about">
+          <Card>
+            <CardHeader>
+              <CardTitle>About Me Section</CardTitle>
+              <CardDescription>Edit your about me content and profile picture</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Profile Picture Upload */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Profile Picture</h3>
+                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
+                  <div className="text-center">
+                    <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                      AR
+                    </div>
+                    <h4 className="text-md font-medium mb-2">Upload Profile Picture</h4>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Choose an image file for your profile picture
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setProfilePicture(e.target.files?.[0] || null)}
+                      className="hidden"
+                      id="profile-picture-upload"
+                    />
+                    <label
+                      htmlFor="profile-picture-upload"
+                      className="inline-flex items-center px-4 py-2 border border-muted rounded-md shadow-sm text-sm font-medium cursor-pointer hover:bg-muted/50 transition-colors"
+                    >
+                      Choose Image File
+                    </label>
+                  </div>
+                </div>
+
+                {profilePicture && (
+                  <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/25">
+                    <div>
+                      <p className="font-medium">{profilePicture.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {(profilePicture.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <Button onClick={handleProfilePictureUpload} disabled={uploading}>
+                      {uploading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload Picture
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+
+                {hasProfilePicture && (
+                  <div className="flex items-center justify-between p-4 border rounded-lg bg-green-50 border-green-200">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                        <Upload className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-green-800">Profile Picture Available</p>
+                        <p className="text-sm text-green-600">
+                          Profile picture is displayed on your website
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* About Content */}
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="bio">Bio</Label>
+                  <Textarea
+                    id="bio"
+                    value={aboutData.bio}
+                    onChange={(e) => setAboutData({ ...aboutData, bio: e.target.value })}
+                    placeholder="Write a brief bio about yourself"
+                    rows={4}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="experience">Years of Experience</Label>
+                  <Input
+                    id="experience"
+                    value={aboutData.experience}
+                    onChange={(e) => setAboutData({ ...aboutData, experience: e.target.value })}
+                    placeholder="e.g., 6+ years"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="skills">Skills (comma separated)</Label>
+                  <Textarea
+                    id="skills"
+                    value={aboutData.skills?.join(', ') || ''}
+                    onChange={(e) => setAboutData({ 
+                      ...aboutData, 
+                      skills: e.target.value.split(',').map(skill => skill.trim()).filter(skill => skill) 
+                    })}
+                    placeholder="React, Node.js, TypeScript, Python"
+                    rows={3}
+                  />
+                </div>
+                <Button onClick={saveAboutData} className="w-full">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save About Section
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
