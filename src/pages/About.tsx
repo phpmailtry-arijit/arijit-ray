@@ -6,48 +6,98 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 
-const timelineData = [
-  {
-    year: '2024',
-    title: 'Senior Full Stack Developer',
-    company: 'Tech Innovation Inc.',
-    location: 'Remote',
-    description: 'Leading development of enterprise applications using React, Node.js, and AWS.',
-    skills: ['React', 'Node.js', 'AWS', 'TypeScript', 'MongoDB']
-  },
-  {
-    year: '2022',
-    title: 'Full Stack Developer',
-    company: 'StartupXYZ',
-    location: 'Bangalore, India',
-    description: 'Built scalable web applications and mobile apps for fintech startup.',
-    skills: ['React Native', 'Express.js', 'PostgreSQL', 'Docker']
-  },
-  {
-    year: '2020',
-    title: 'Frontend Developer',
-    company: 'WebSolutions Ltd.',
-    location: 'Kolkata, India',
-    description: 'Developed responsive web interfaces and improved user experience.',
-    skills: ['JavaScript', 'CSS3', 'Vue.js', 'Sass']
-  },
-  {
-    year: '2018',
-    title: 'Computer Science Graduate',
-    company: 'University of Technology',
-    location: 'Kolkata, India',
-    description: 'Graduated with honors in Computer Science and Engineering.',
-    skills: ['Data Structures', 'Algorithms', 'Database Systems']
-  }
-];
+interface Experience {
+  id: string;
+  year: string;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+  skills: string[];
+  display_order: number;
+}
+
+interface Skill {
+  id: string;
+  name: string;
+  category: string;
+  proficiency: number;
+  years_experience: number;
+}
+
+interface SkillCategory {
+  title: string;
+  skills: string[];
+  icon: any;
+}
 
 export default function About() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProfilePicture();
+    Promise.all([
+      fetchProfilePicture(),
+      fetchExperiences(),
+      fetchSkills()
+    ]).finally(() => setLoading(false));
   }, []);
+
+  const fetchExperiences = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('professional_experience')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setExperiences(data || []);
+    } catch (error) {
+      console.error('Error fetching experiences:', error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('*')
+        .order('category', { ascending: true });
+
+      if (error) throw error;
+
+      // Group skills by category
+      const groupedSkills = (data || []).reduce((acc: Record<string, Skill[]>, skill) => {
+        if (!acc[skill.category]) {
+          acc[skill.category] = [];
+        }
+        acc[skill.category].push(skill);
+        return acc;
+      }, {});
+
+      // Convert to SkillCategory format
+      const categories: SkillCategory[] = Object.entries(groupedSkills).map(([category, skills]) => ({
+        title: category,
+        skills: skills.map(skill => skill.name),
+        icon: getIconForCategory(category)
+      }));
+
+      setSkillCategories(categories);
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+    }
+  };
+
+  const getIconForCategory = (category: string) => {
+    const lowerCategory = category.toLowerCase();
+    if (lowerCategory.includes('frontend') || lowerCategory.includes('front-end')) return Code;
+    if (lowerCategory.includes('backend') || lowerCategory.includes('back-end')) return Award;
+    if (lowerCategory.includes('devops') || lowerCategory.includes('tools')) return MapPin;
+    return Code; // Default icon
+  };
 
   const fetchProfilePicture = async () => {
     try {
@@ -157,8 +207,11 @@ export default function About() {
       <section className="py-16 px-4 bg-muted/30">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Professional Journey</h2>
-          <div className="space-y-8">
-            {timelineData.map((item, index) => (
+          {loading ? (
+            <div className="text-center">Loading experiences...</div>
+          ) : experiences.length > 0 ? (
+            <div className="space-y-8">
+              {experiences.map((item, index) => (
               <Card 
                 key={index}
                 className={`group transition-all duration-300 cursor-pointer ${
@@ -197,8 +250,13 @@ export default function About() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground">
+              No professional experience added yet.
+            </div>
+          )}
         </div>
       </section>
 
@@ -206,41 +264,33 @@ export default function About() {
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Core Skills</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Frontend Development',
-                skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
-                icon: Code
-              },
-              {
-                title: 'Backend Development',
-                skills: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'GraphQL'],
-                icon: Award
-              },
-              {
-                title: 'DevOps & Tools',
-                skills: ['Docker', 'AWS', 'Git', 'CI/CD', 'Kubernetes'],
-                icon: MapPin
-              }
-            ].map((category, index) => (
-              <Card key={index} className="group hover:shadow-elevated transition-all duration-300 animate-fade-in-scale" style={{ animationDelay: `${index * 0.1}s` }}>
-                <CardHeader>
-                  <category.icon className="w-12 h-12 text-primary mb-4 group-hover:animate-tech-glow" />
-                  <CardTitle>{category.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {category.skills.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center">Loading skills...</div>
+          ) : skillCategories.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-8">
+              {skillCategories.map((category, index) => (
+                <Card key={index} className="group hover:shadow-elevated transition-all duration-300 animate-fade-in-scale" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <CardHeader>
+                    <category.icon className="w-12 h-12 text-primary mb-4 group-hover:animate-tech-glow" />
+                    <CardTitle>{category.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {category.skills.map((skill) => (
+                        <Badge key={skill} variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground">
+              No skills added yet.
+            </div>
+          )}
         </div>
       </section>
     </div>

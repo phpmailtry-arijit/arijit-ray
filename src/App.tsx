@@ -20,6 +20,7 @@ import ProjectManagement from "./pages/admin/ProjectManagement";
 import MessagesManagement from "./pages/admin/MessagesManagement";
 import Analytics from "./pages/admin/Analytics";
 import AdminProfile from "./pages/admin/AdminProfile";
+import ExperienceManagement from "./pages/admin/ExperienceManagement";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="blog" element={<BlogManagement />} />
               <Route path="projects" element={<ProjectManagement />} />
               <Route path="messages" element={<MessagesManagement />} />
+              <Route path="experience" element={<ExperienceManagement />} />
               <Route path="analytics" element={<Analytics />} />
             </Route>
             <Route path="*" element={<NotFound />} />
