@@ -18,9 +18,6 @@ export function HeroSection() {
     description: 'End-to-end technology leadership covering full-stack engineering, DevOps, databases, and cloud cost efficiency. Blending strategy with execution to deliver scalable and impactful solutions'
   });
 
-  useEffect(() => {
-    console.log('HeroData state changed:', heroData);
-  }, [heroData]);
 
   useEffect(() => {
     fetchHeroData();
@@ -40,11 +37,8 @@ export function HeroSection() {
       }
       
       if (data?.content) {
-        console.log('Fetched hero data:', data.content);
-        console.log('Current heroData state before update:', heroData);
         const newHeroData = data.content as unknown as HeroData;
         setHeroData(newHeroData);
-        console.log('Updated heroData state:', newHeroData);
       }
     } catch (error) {
       console.error('Error fetching hero data:', error);
@@ -112,9 +106,8 @@ export function HeroSection() {
             </span>
           </h1>
           
-          <p key={heroData.subheading} className="text-2xl sm:text-3xl lg:text-4xl mb-6 font-light animate-slide-up-fade text-foreground" style={{ animationDelay: '0.2s' }}>
-            {heroData.subheading || 'NO SUBHEADING FOUND'}
-            <span style={{fontSize: '12px', color: 'red'}}>DEBUG: {JSON.stringify(heroData.subheading)}</span>
+          <p className="text-2xl sm:text-3xl lg:text-4xl mb-6 font-light animate-slide-up-fade text-foreground" style={{ animationDelay: '0.2s' }}>
+            {heroData.subheading}
           </p>
           
           <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed animate-slide-up-fade" style={{ animationDelay: '0.4s' }}>
