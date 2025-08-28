@@ -4,17 +4,15 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 
 interface HeroData {
-  name: string;
-  title: string;
-  tagline: string;
+  heading: string;
+  subheading: string;
   description: string;
 }
 
 export function HeroSection() {
   const [heroData, setHeroData] = useState<HeroData>({
-    name: 'Arijit Ray',
-    title: 'Tech Lead & Full Stack Developer',
-    tagline: 'Building innovative solutions with cutting-edge technology',
+    heading: 'Arijit Ray',
+    subheading: 'Tech Lead & Full Stack Developer', 
     description: 'Passionate about creating scalable applications and leading high-performing development teams.'
   });
 
@@ -52,16 +50,12 @@ export function HeroSection() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
             <span className="block text-foreground mb-2">Hi, I'm</span>
             <span className="bg-gradient-neon bg-clip-text text-transparent animate-tech-glow">
-              {heroData.name}
+              {heroData.heading}
             </span>
           </h1>
           
           <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground mb-4 font-light">
-            {heroData.title}
-          </p>
-          
-          <p className="text-lg sm:text-xl text-primary mb-6 font-medium">
-            {heroData.tagline}
+            {heroData.subheading}
           </p>
           
           <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
