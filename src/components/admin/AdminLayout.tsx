@@ -9,7 +9,8 @@ import {
   Settings, 
   User,
   Home,
-  X
+  X,
+  Mail
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -23,6 +24,7 @@ const adminNavigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: BarChart3 },
   { name: 'Blog Management', href: '/admin/blog', icon: FileText },
   { name: 'Project Management', href: '/admin/projects', icon: FolderOpen },
+  { name: 'Messages', href: '/admin/messages', icon: Mail },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
 ];
 

@@ -15,6 +15,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import BlogManagement from "./pages/admin/BlogManagement";
 import ProjectManagement from "./pages/admin/ProjectManagement";
+import MessagesManagement from "./pages/admin/MessagesManagement";
 import Analytics from "./pages/admin/Analytics";
 import NotFound from "./pages/NotFound";
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="blog" element={<BlogManagement />} />
             <Route path="projects" element={<ProjectManagement />} />
+            <Route path="messages" element={<MessagesManagement />} />
             <Route path="analytics" element={<Analytics />} />
           </Route>
           
