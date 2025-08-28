@@ -48,7 +48,6 @@ export function HeroSection() {
         {/* Main Content */}
         <div className="animate-fade-in-scale">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
-            <span className="block text-foreground mb-2">Hi, I'm</span>
             <span className="bg-gradient-neon bg-clip-text text-transparent animate-tech-glow">
               {heroData.heading}
             </span>
