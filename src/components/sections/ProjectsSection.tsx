@@ -61,12 +61,20 @@ export function ProjectsSection() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardContent className="p-0">
-                    {/* Project Image Placeholder */}
-                    <div className="aspect-video bg-muted rounded-t-lg flex items-center justify-center border-b border-border/50">
-                      <div className="text-center">
-                        <Star className="w-12 h-12 text-primary mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground">Featured Project</p>
-                      </div>
+                    {/* Project Image */}
+                    <div className="aspect-video bg-muted rounded-t-lg flex items-center justify-center border-b border-border/50 overflow-hidden">
+                      {project.image_url ? (
+                        <img 
+                          src={project.image_url} 
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-center">
+                          <Star className="w-12 h-12 text-primary mx-auto mb-2" />
+                          <p className="text-sm text-muted-foreground">Featured Project</p>
+                        </div>
+                      )}
                     </div>
                     
                     <div className="p-6">
@@ -138,6 +146,17 @@ export function ProjectsSection() {
                   style={{ animationDelay: `${(featuredProjects.length + index) * 0.1}s` }}
                 >
                   <CardContent className="p-6">
+                    {/* Project Image for Other Projects */}
+                    {project.image_url && (
+                      <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                        <img 
+                          src={project.image_url} 
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    
                     <h4 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {project.title}
                     </h4>
