@@ -16,6 +16,7 @@ export function AboutSection() {
     experience: '6+ years'
   });
   const [loading, setLoading] = useState(true);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAboutData();
@@ -31,6 +32,18 @@ export function AboutSection() {
       
       if (data?.content) {
         setAboutContent(data.content as unknown as AboutContent);
+      }
+
+      // Check for profile picture
+      const { data: profileFiles } = await supabase.storage
+        .from('profiles')
+        .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
+
+      if (profileFiles && profileFiles.length > 0) {
+        const { data: { publicUrl } } = supabase.storage
+          .from('profiles')
+          .getPublicUrl(profileFiles[0].name);
+        setProfileImageUrl(publicUrl);
       }
     } catch (error) {
       console.error('Error fetching about data:', error);
@@ -60,9 +73,17 @@ export function AboutSection() {
           {/* Profile Image */}
           <div className="relative group">
             <div className="aspect-square rounded-2xl bg-gradient-card p-8 shadow-elevated">
-              <div className="w-full h-full rounded-xl bg-muted flex items-center justify-center text-6xl font-bold text-muted-foreground">
-                AR
-              </div>
+              {profileImageUrl ? (
+                <img
+                  src={profileImageUrl}
+                  alt="Profile"
+                  className="w-full h-full rounded-xl object-cover"
+                />
+              ) : (
+                <div className="w-full h-full rounded-xl bg-muted flex items-center justify-center text-6xl font-bold text-muted-foreground">
+                  AR
+                </div>
+              )}
             </div>
             <div className="absolute inset-0 rounded-2xl bg-gradient-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
           </div>
