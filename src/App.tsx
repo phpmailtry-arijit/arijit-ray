@@ -1,59 +1,58 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navbar } from "@/components/navigation/Navbar";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
+import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
-import Contact from "./pages/Contact";
-import Login from "./pages/admin/Login";
+import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/admin/Login";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import BlogManagement from "./pages/admin/BlogManagement";
 import ProjectManagement from "./pages/admin/ProjectManagement";
 import MessagesManagement from "./pages/admin/MessagesManagement";
 import Analytics from "./pages/admin/Analytics";
-import NotFound from "./pages/NotFound";
+import AdminProfile from "./pages/admin/AdminProfile";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-        <Routes>
-          {/* Public routes with navbar */}
-          <Route path="/" element={<><Navbar /><Index /></>} />
-          <Route path="/about" element={<><Navbar /><About /></>} />
-          <Route path="/projects" element={<><Navbar /><Projects /></>} />
-          <Route path="/blog" element={<><Navbar /><Blog /></>} />
-          <Route path="/blog/:slug" element={<><Navbar /><BlogDetail /></>} />
-          <Route path="/contact" element={<><Navbar /><Contact /></>} />
-          
-          {/* Admin routes without navbar */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="blog" element={<BlogManagement />} />
-            <Route path="projects" element={<ProjectManagement />} />
-            <Route path="messages" element={<MessagesManagement />} />
-            <Route path="analytics" element={<Analytics />} />
-          </Route>
-          
-          {/* Catch-all route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </ThemeProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/skills" element={<Index />} />
+            <Route path="/achievements" element={<Index />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="profile" element={<AdminProfile />} />
+              <Route path="blog" element={<BlogManagement />} />
+              <Route path="projects" element={<ProjectManagement />} />
+              <Route path="messages" element={<MessagesManagement />} />
+              <Route path="analytics" element={<Analytics />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

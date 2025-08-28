@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 
 const adminNavigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: BarChart3 },
+  { name: 'Edit Profile', href: '/admin/profile', icon: Settings },
   { name: 'Blog Management', href: '/admin/blog', icon: FileText },
   { name: 'Project Management', href: '/admin/projects', icon: FolderOpen },
   { name: 'Messages', href: '/admin/messages', icon: Mail },
@@ -120,6 +121,7 @@ export default function AdminLayout() {
         description: "Failed to log out",
         variant: "destructive",
       });
+      navigate('/admin/login'); // Navigate to login even if logout fails
     }
   };
 
