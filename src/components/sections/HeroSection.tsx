@@ -24,13 +24,19 @@ export function HeroSection() {
 
   const fetchHeroData = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('portfolio_content')
         .select('content')
         .eq('section', 'hero')
         .maybeSingle();
       
+      if (error) {
+        console.error('Error fetching hero data:', error);
+        return;
+      }
+      
       if (data?.content) {
+        console.log('Fetched hero data:', data.content);
         setHeroData(data.content as unknown as HeroData);
       }
     } catch (error) {
