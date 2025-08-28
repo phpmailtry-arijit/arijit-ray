@@ -21,6 +21,7 @@ import MessagesManagement from "./pages/admin/MessagesManagement";
 import Analytics from "./pages/admin/Analytics";
 import AdminProfile from "./pages/admin/AdminProfile";
 import ExperienceManagement from "./pages/admin/ExperienceManagement";
+import BlogGenerationSettings from "./pages/admin/BlogGenerationSettings";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="projects" element={<ProjectManagement />} />
               <Route path="messages" element={<MessagesManagement />} />
               <Route path="experience" element={<ExperienceManagement />} />
+              <Route path="blog-generation" element={<BlogGenerationSettings />} />
               <Route path="analytics" element={<Analytics />} />
             </Route>
             <Route path="*" element={<NotFound />} />

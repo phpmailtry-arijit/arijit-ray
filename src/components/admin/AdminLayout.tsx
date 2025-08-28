@@ -11,7 +11,8 @@ import {
   Home,
   X,
   Mail,
-  Briefcase
+  Briefcase,
+  Bot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,6 +26,7 @@ const adminNavigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: BarChart3 },
   { name: 'Edit Profile', href: '/admin/profile', icon: Settings },
   { name: 'Blog Management', href: '/admin/blog', icon: FileText },
+  { name: 'AI Blog Generation', href: '/admin/blog-generation', icon: Bot },
   { name: 'Project Management', href: '/admin/projects', icon: FolderOpen },
   { name: 'Experience Management', href: '/admin/experience', icon: Briefcase },
   { name: 'Messages', href: '/admin/messages', icon: Mail },
