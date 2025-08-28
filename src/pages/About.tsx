@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Calendar, MapPin, Code, Award, Download, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, MapPin, Code, Award, Download } from 'lucide-react';
 import { Navbar } from '@/components/navigation/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
 
 const timelineData = [
   {
@@ -42,6 +43,59 @@ const timelineData = [
 
 export default function About() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchProfilePicture();
+  }, []);
+
+  const fetchProfilePicture = async () => {
+    try {
+      const { data: files } = await supabase.storage
+        .from('profiles')
+        .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
+
+      if (files && files.length > 0) {
+        const { data } = supabase.storage
+          .from('profiles')
+          .getPublicUrl(files[0].name);
+        
+        setProfilePictureUrl(data.publicUrl);
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+    }
+  };
+
+  const handleDownloadResume = async () => {
+    try {
+      const { data } = await supabase.storage
+        .from('resumes')
+        .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
+
+      if (data && data.length > 0) {
+        const { data: downloadData } = await supabase.storage
+          .from('resumes')
+          .download(data[0].name);
+
+        if (downloadData) {
+          const url = URL.createObjectURL(downloadData);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'resume.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+      } else {
+        alert('No resume available for download');
+      }
+    } catch (error) {
+      console.error('Error downloading resume:', error);
+      alert('Error downloading resume');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,13 +122,9 @@ export default function About() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <Button className="group">
+                <Button onClick={handleDownloadResume} className="group">
                   <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                   Download Resume
-                </Button>
-                <Button variant="outline">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  View Portfolio
                 </Button>
               </div>
             </div>
@@ -82,8 +132,16 @@ export default function About() {
             <div className="relative animate-slide-in-right">
               <div className="relative w-full max-w-md mx-auto">
                 <div className="aspect-square rounded-2xl bg-gradient-primary p-1 shadow-glow animate-glow-pulse">
-                  <div className="w-full h-full rounded-xl bg-card flex items-center justify-center">
-                    <Code className="w-24 h-24 text-primary" />
+                  <div className="w-full h-full rounded-xl bg-card flex items-center justify-center overflow-hidden">
+                    {profilePictureUrl ? (
+                      <img 
+                        src={profilePictureUrl} 
+                        alt="Profile" 
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                    ) : (
+                      <Code className="w-24 h-24 text-primary" />
+                    )}
                   </div>
                 </div>
                 <div className="absolute -top-4 -right-4 w-16 h-16 bg-accent rounded-full flex items-center justify-center animate-float">
