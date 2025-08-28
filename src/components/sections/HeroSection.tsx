@@ -32,7 +32,7 @@ export function HeroSection() {
         .from('portfolio_content')
         .select('content')
         .eq('section', 'hero')
-        .maybeSingle();
+        .single();
       
       if (error) {
         console.error('Error fetching hero data:', error);
@@ -42,8 +42,9 @@ export function HeroSection() {
       if (data?.content) {
         console.log('Fetched hero data:', data.content);
         console.log('Current heroData state before update:', heroData);
-        setHeroData(data.content as unknown as HeroData);
-        console.log('Updated heroData state:', data.content);
+        const newHeroData = data.content as unknown as HeroData;
+        setHeroData(newHeroData);
+        console.log('Updated heroData state:', newHeroData);
       }
     } catch (error) {
       console.error('Error fetching hero data:', error);
