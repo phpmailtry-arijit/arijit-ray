@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink, Github, Star } from 'lucide-react';
+import { ExternalLink, Github, Star, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Project {
@@ -109,6 +109,12 @@ export function ProjectsSection() {
                             </a>
                           </Button>
                         )}
+                        {!project.github_url && !project.live_url && (
+                          <Button variant="outline" size="sm" disabled>
+                            <Shield className="w-4 h-4 mr-2" />
+                            Confidential Project
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -174,6 +180,12 @@ export function ProjectsSection() {
                             <ExternalLink className="w-3 h-3 mr-1" />
                             Demo
                           </a>
+                        </Button>
+                      )}
+                      {!project.github_url && !project.live_url && (
+                        <Button variant="outline" size="sm" disabled>
+                          <Shield className="w-3 h-3 mr-1" />
+                          Confidential
                         </Button>
                       )}
                     </div>
