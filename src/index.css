@@ -129,6 +129,78 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Neon Theme */
+  .neon {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 162 100% 50%;
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 162 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  /* Ocean Theme */
+  .ocean {
+    --background: 210 40% 8%;
+    --foreground: 210 40% 98%;
+    --card: 210 40% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 210 40% 10%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 200 100% 50%;
+    --primary-foreground: 210 40% 8%;
+    --secondary: 210 40% 14.9%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 14.9%;
+    --muted-foreground: 210 40% 63.9%;
+    --accent: 190 100% 40%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 40% 14.9%;
+    --input: 210 40% 14.9%;
+    --ring: 200 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  /* Sunset Theme */
+  .sunset {
+    --background: 15 25% 8%;
+    --foreground: 15 25% 98%;
+    --card: 15 25% 10%;
+    --card-foreground: 15 25% 98%;
+    --popover: 15 25% 10%;
+    --popover-foreground: 15 25% 98%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 15 25% 8%;
+    --secondary: 15 25% 14.9%;
+    --secondary-foreground: 15 25% 98%;
+    --muted: 15 25% 14.9%;
+    --muted-foreground: 15 25% 63.9%;
+    --accent: 340 100% 60%;
+    --accent-foreground: 15 25% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 15 25% 98%;
+    --border: 15 25% 14.9%;
+    --input: 15 25% 14.9%;
+    --ring: 25 95% 53%;
+    --radius: 0.5rem;
+  }
 }
 
 @layer base {

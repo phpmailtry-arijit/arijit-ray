@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter, ExternalLink, CheckCircle } from 'lucide-react';
+import { Navbar } from '@/components/navigation/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -113,9 +114,10 @@ export default function Contact() {
   const isFormValid = form.name && form.email && form.message;
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background">
+      <Navbar />
       {/* Header */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 pt-20">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-6 animate-fade-in">
             Get In Touch

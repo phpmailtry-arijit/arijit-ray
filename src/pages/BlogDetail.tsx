@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Clock, Tag, Share2, ArrowLeft, Copy, Twitter, Facebook, Linkedin } from 'lucide-react';
+import { Navbar } from '@/components/navigation/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -119,9 +120,10 @@ export default function BlogDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background">
+      <Navbar />
       {/* Navigation */}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6 pt-20">
         <div className="max-w-4xl mx-auto">
           <Button variant="ghost" asChild className="hover:bg-secondary">
             <Link to="/blog">

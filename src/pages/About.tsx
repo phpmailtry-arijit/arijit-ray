@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Calendar, MapPin, Code, Award, Download, ExternalLink } from 'lucide-react';
+import { Navbar } from '@/components/navigation/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -43,9 +44,10 @@ export default function About() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background">
+      <Navbar />
       {/* Hero Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 pt-20">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
