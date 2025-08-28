@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowDown, Github, Linkedin, Mail, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 interface HeroData {
   heading: string;
@@ -10,6 +11,7 @@ interface HeroData {
 }
 
 export function HeroSection() {
+  const navigate = useNavigate();
   const [heroData, setHeroData] = useState<HeroData>({
     heading: 'Arijit Ray',
     subheading: 'Tech Lead & Full Stack Developer', 
@@ -35,6 +37,40 @@ export function HeroSection() {
   const scrollToContent = () => {
     const element = document.getElementById('about');
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleGetInTouch = () => {
+    navigate('/contact');
+  };
+
+  const handleDownloadResume = async () => {
+    try {
+      const { data } = await supabase.storage
+        .from('resumes')
+        .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
+
+      if (data && data.length > 0) {
+        const { data: downloadData } = await supabase.storage
+          .from('resumes')
+          .download(data[0].name);
+
+        if (downloadData) {
+          const url = URL.createObjectURL(downloadData);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'resume.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+      } else {
+        alert('No resume available for download');
+      }
+    } catch (error) {
+      console.error('Error downloading resume:', error);
+      alert('Error downloading resume');
+    }
   };
 
   return (
@@ -69,11 +105,11 @@ export function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-slide-up-fade" style={{ animationDelay: '0.6s' }}>
-            <Button size="lg" className="group bg-gradient-primary hover:bg-gradient-professional shadow-luxury hover:shadow-professional transition-all duration-500 animate-magnetic px-8 py-4 text-lg">
+            <Button onClick={handleGetInTouch} size="lg" className="group bg-gradient-primary hover:bg-gradient-professional shadow-luxury hover:shadow-professional transition-all duration-500 animate-magnetic px-8 py-4 text-lg">
               <Mail className="w-6 h-6 mr-3 group-hover:animate-bounce" />
               Get In Touch
             </Button>
-            <Button variant="outline" size="lg" className="group glass-effect hover:bg-gradient-accent hover:text-white hover:border-transparent transition-all duration-500 animate-magnetic px-8 py-4 text-lg">
+            <Button onClick={handleDownloadResume} variant="outline" size="lg" className="group glass-effect hover:bg-gradient-accent hover:text-white hover:border-transparent transition-all duration-500 animate-magnetic px-8 py-4 text-lg">
               <Download className="w-6 h-6 mr-3 group-hover:animate-bounce" />
               Download Resume
             </Button>

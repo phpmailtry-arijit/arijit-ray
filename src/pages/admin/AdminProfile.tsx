@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Edit, Trash2, Save } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, Upload, Download } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -65,6 +65,9 @@ export default function AdminProfile() {
   const [editingAchievement, setEditingAchievement] = useState<Achievement | null>(null);
   const [skillDialogOpen, setSkillDialogOpen] = useState(false);
   const [achievementDialogOpen, setAchievementDialogOpen] = useState(false);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [hasResume, setHasResume] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -103,6 +106,13 @@ export default function AdminProfile() {
       if (achievementsData) {
         setAchievements(achievementsData);
       }
+
+      // Check if resume exists
+      const { data: resumeFiles } = await supabase.storage
+        .from('resumes')
+        .list('', { limit: 1 });
+      
+      setHasResume(resumeFiles && resumeFiles.length > 0);
     } catch (error) {
       console.error('Error loading data:', error);
       toast({
@@ -264,6 +274,87 @@ export default function AdminProfile() {
     }
   };
 
+  const handleResumeUpload = async () => {
+    if (!resumeFile) return;
+
+    setUploading(true);
+    try {
+      // Delete existing resume if any
+      const { data: existingFiles } = await supabase.storage
+        .from('resumes')
+        .list('');
+
+      if (existingFiles && existingFiles.length > 0) {
+        for (const file of existingFiles) {
+          await supabase.storage
+            .from('resumes')
+            .remove([file.name]);
+        }
+      }
+
+      // Upload new resume
+      const fileExt = resumeFile.name.split('.').pop();
+      const fileName = `resume.${fileExt}`;
+      
+      const { error } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, resumeFile, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (error) throw error;
+
+      setHasResume(true);
+      setResumeFile(null);
+      toast({
+        title: "Success",
+        description: "Resume uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Error uploading resume:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload resume",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDownloadResume = async () => {
+    try {
+      const { data } = await supabase.storage
+        .from('resumes')
+        .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
+
+      if (data && data.length > 0) {
+        const { data: downloadData } = await supabase.storage
+          .from('resumes')
+          .download(data[0].name);
+
+        if (downloadData) {
+          const url = URL.createObjectURL(downloadData);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'resume.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+      }
+    } catch (error) {
+      console.error('Error downloading resume:', error);
+      toast({
+        title: "Error",
+        description: "Failed to download resume",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -280,8 +371,9 @@ export default function AdminProfile() {
       </div>
 
       <Tabs defaultValue="hero" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="hero">Hero Section</TabsTrigger>
+          <TabsTrigger value="resume">Resume</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
         </TabsList>
@@ -325,6 +417,83 @@ export default function AdminProfile() {
                 <Save className="w-4 h-4 mr-2" />
                 Save Hero Section
               </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="resume">
+          <Card>
+            <CardHeader>
+              <CardTitle>Resume Management</CardTitle>
+              <CardDescription>Upload and manage your resume PDF</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
+                <div className="text-center">
+                  <Upload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Upload Resume</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Choose a PDF file to upload. Only the latest uploaded resume will be available for download.
+                  </p>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+                    className="hidden"
+                    id="resume-upload"
+                  />
+                  <label
+                    htmlFor="resume-upload"
+                    className="inline-flex items-center px-4 py-2 border border-muted rounded-md shadow-sm text-sm font-medium cursor-pointer hover:bg-muted/50 transition-colors"
+                  >
+                    Choose PDF File
+                  </label>
+                </div>
+              </div>
+
+              {resumeFile && (
+                <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/25">
+                  <div>
+                    <p className="font-medium">{resumeFile.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {(resumeFile.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <Button onClick={handleResumeUpload} disabled={uploading}>
+                    {uploading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Resume
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+
+              {hasResume && (
+                <div className="flex items-center justify-between p-4 border rounded-lg bg-green-50 border-green-200">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                      <Download className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-green-800">Resume Available</p>
+                      <p className="text-sm text-green-600">
+                        Resume is ready for download from your website
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="outline" onClick={handleDownloadResume}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
