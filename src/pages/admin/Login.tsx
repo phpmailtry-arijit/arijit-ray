@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, UserPlus, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,7 +38,7 @@ export default function Login() {
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
-      setShowSignup(!profiles || count === 0); // Show signup only if no profiles exist
+      setShowSignup(count === 0); // Show signup only if no profiles exist
     };
     
     checkAuthAndAdmin();
@@ -165,6 +165,19 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Home Button */}
+        <div className="flex justify-center mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/')}
+            className="group hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            <Home className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+            Back to Home
+          </Button>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-4 shadow-glow">
