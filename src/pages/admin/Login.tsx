@@ -105,13 +105,19 @@ export default function Login() {
           .from('profiles')
           .select('role')
           .eq('user_id', data.user.id)
-          .single();
+          .maybeSingle();
 
         if (profileError) {
+          console.error('Profile query error:', profileError);
           throw new Error('Failed to verify user permissions');
         }
 
-        if (profile?.role !== 'admin') {
+        if (!profile) {
+          await supabase.auth.signOut();
+          throw new Error('No profile found. Please contact admin to set up your account.');
+        }
+
+        if (profile.role !== 'admin') {
           await supabase.auth.signOut();
           throw new Error('Access denied. Admin privileges required.');
         }
