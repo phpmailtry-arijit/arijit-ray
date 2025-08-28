@@ -39,30 +39,30 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Vibrant gradient colors for fancy effect */
-    --sunset-orange: 14 100% 62%;
-    --sunset-pink: 329 86% 70%;
-    --ocean-blue: 201 96% 32%;
-    --ocean-cyan: 187 85% 53%;
-    --forest-green: 142 76% 36%;
-    --electric-purple: 271 81% 56%;
-    --golden-yellow: 48 100% 67%;
-    --coral-red: 0 100% 67%;
+    /* Professional yet fancy gradient colors */
+    --primary-blue: 214 100% 50%;
+    --primary-indigo: 249 100% 65%;
+    --accent-teal: 180 100% 50%;
+    --accent-purple: 268 100% 70%;
+    --neutral-slate: 215 25% 27%;
+    --neutral-gray: 220 15% 60%;
+    --highlight-gold: 45 100% 60%;
+    --highlight-emerald: 160 84% 39%;
 
-    /* Stunning gradients */
-    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset-orange)), hsl(var(--sunset-pink)));
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-blue)), hsl(var(--ocean-cyan)));
-    --gradient-electric: linear-gradient(45deg, hsl(var(--electric-purple)), hsl(var(--ocean-cyan)), hsl(var(--sunset-pink)));
-    --gradient-rainbow: linear-gradient(90deg, hsl(var(--sunset-orange)), hsl(var(--golden-yellow)), hsl(var(--forest-green)), hsl(var(--ocean-cyan)), hsl(var(--electric-purple)), hsl(var(--sunset-pink)));
-    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+    /* Professional gradient combinations */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary-blue)), hsl(var(--primary-indigo)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-teal)), hsl(var(--accent-purple)));
+    --gradient-professional: linear-gradient(135deg, hsl(var(--neutral-slate)), hsl(var(--primary-indigo)));
+    --gradient-subtle: linear-gradient(135deg, hsl(var(--neutral-gray) / 0.8), hsl(var(--primary-blue) / 0.6));
+    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 
-    /* Advanced shadows and glows */
-    --glow-sunset: 0 0 40px hsl(var(--sunset-orange) / 0.4);
-    --glow-ocean: 0 0 40px hsl(var(--ocean-cyan) / 0.4);
-    --glow-electric: 0 0 60px hsl(var(--electric-purple) / 0.5);
-    --shadow-luxury: 0 32px 64px -12px rgba(0, 0, 0, 0.25);
-    --shadow-floating: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    --shadow-neon: 0 0 30px hsl(var(--electric-purple) / 0.3);
+    /* Professional shadows and glows */
+    --glow-primary: 0 0 40px hsl(var(--primary-blue) / 0.3);
+    --glow-accent: 0 0 40px hsl(var(--accent-teal) / 0.3);
+    --glow-professional: 0 0 60px hsl(var(--primary-indigo) / 0.4);
+    --shadow-luxury: 0 20px 40px -8px rgba(0, 0, 0, 0.15);
+    --shadow-floating: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
+    --shadow-professional: 0 8px 25px hsl(var(--primary-indigo) / 0.15);
 
     /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -108,17 +108,17 @@ All colors MUST be HSL.
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
 
-    /* Dark mode gradients with enhanced vibrancy */
-    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset-orange)), hsl(var(--sunset-pink)));
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-blue)), hsl(var(--ocean-cyan)));
-    --gradient-electric: linear-gradient(45deg, hsl(var(--electric-purple)), hsl(var(--ocean-cyan)), hsl(var(--sunset-pink)));
-    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    /* Dark mode professional gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary-blue)), hsl(var(--primary-indigo)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-teal)), hsl(var(--accent-purple)));
+    --gradient-professional: linear-gradient(135deg, hsl(var(--neutral-slate)), hsl(var(--primary-indigo)));
+    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
 
-    /* Enhanced dark mode glows */
-    --glow-sunset: 0 0 60px hsl(var(--sunset-orange) / 0.6);
-    --glow-ocean: 0 0 60px hsl(var(--ocean-cyan) / 0.6);
-    --glow-electric: 0 0 80px hsl(var(--electric-purple) / 0.7);
-    --shadow-neon: 0 0 50px hsl(var(--electric-purple) / 0.5);
+    /* Enhanced dark mode professional glows */
+    --glow-primary: 0 0 50px hsl(var(--primary-blue) / 0.5);
+    --glow-accent: 0 0 50px hsl(var(--accent-teal) / 0.5);
+    --glow-professional: 0 0 70px hsl(var(--primary-indigo) / 0.6);
+    --shadow-professional: 0 12px 30px hsl(var(--primary-indigo) / 0.25);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
