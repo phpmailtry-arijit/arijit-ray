@@ -13,9 +13,9 @@ interface HeroData {
 export function HeroSection() {
   const navigate = useNavigate();
   const [heroData, setHeroData] = useState<HeroData>({
-    heading: 'Arijit Ray',
-    subheading: 'Tech Lead & Full Stack Developer', 
-    description: 'Passionate about creating scalable applications and leading high-performing development teams.'
+    heading: 'Hi, I am Arijit Ray',
+    subheading: 'Full Stack Developer & Digital Creator', 
+    description: 'I craft beautiful, functional web applications that solve real-world problems.'
   });
 
   useEffect(() => {
