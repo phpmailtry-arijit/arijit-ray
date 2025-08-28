@@ -121,7 +121,7 @@ export default function AdminProfile() {
         .from('portfolio_content')
         .upsert({
           section: 'hero',
-          content: heroData,
+          content: heroData as any,
         });
 
       if (error) throw error;
