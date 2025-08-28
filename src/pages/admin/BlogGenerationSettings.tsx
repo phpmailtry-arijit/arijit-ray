@@ -1,22 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Zap, Calendar, Clock, Sparkles } from 'lucide-react';
+import { Zap, Calendar, Clock, Sparkles, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function BlogGenerationSettings() {
   const [generating, setGenerating] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const triggerBlogGeneration = async () => {
     setGenerating(true);
+    setLastError(null);
+    
     try {
       const { data, error } = await supabase.functions.invoke('generate-daily-blog', {
         body: { manual: true }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        setLastError(error.message);
+        throw error;
+      }
+
+      if (data?.error) {
+        console.error('Function returned error:', data.error);
+        setLastError(data.error);
+        throw new Error(data.error);
+      }
 
       toast({
         title: "Success!",
@@ -24,9 +38,12 @@ export default function BlogGenerationSettings() {
       });
     } catch (error) {
       console.error('Error generating blog:', error);
+      const errorMessage = error.message || 'Failed to generate blog post';
+      setLastError(errorMessage);
+      
       toast({
         title: "Error",
-        description: "Failed to generate blog post. Check the logs for details.",
+        description: "Failed to generate blog post. Check the details below.",
         variant: "destructive",
       });
     } finally {
@@ -66,6 +83,28 @@ export default function BlogGenerationSettings() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Error Display */}
+        {lastError && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              <strong>Last Error:</strong> {lastError}
+              {lastError.includes('429') && (
+                <div className="mt-2 text-sm">
+                  <p><strong>Rate Limit Error (429):</strong> This means you've exceeded OpenAI's API limits.</p>
+                  <p><strong>Solutions:</strong></p>
+                  <ul className="list-disc ml-4 mt-1">
+                    <li>Check your OpenAI billing and ensure you have credits</li>
+                    <li>Wait a few minutes before trying again</li>
+                    <li>Verify your API key is valid and has proper permissions</li>
+                    <li>Check your OpenAI usage dashboard for current limits</li>
+                  </ul>
+                </div>
+              )}
+            </AlertDescription>
+          </Alert>
+        )}
 
         {/* Manual Generation */}
         <Card>

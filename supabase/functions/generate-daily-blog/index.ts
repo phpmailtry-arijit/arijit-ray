@@ -70,30 +70,75 @@ Format the response as JSON with the following structure:
 
     console.log('Generating blog content with OpenAI...');
 
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are a technical blog writer who creates high-quality, informative content about web development and programming topics. Always respond with valid JSON.' 
-          },
-          { role: 'user', content: blogPrompt }
-        ],
-        max_tokens: 2000,
-        temperature: 0.7
-      }),
-    });
+    // Retry logic for rate limiting
+    let openAIResponse;
+    let retryCount = 0;
+    const maxRetries = 3;
 
-    if (!openAIResponse.ok) {
-      const errorText = await openAIResponse.text();
-      console.error('OpenAI API error:', errorText);
-      throw new Error(`OpenAI API error: ${openAIResponse.status}`);
+    while (retryCount < maxRetries) {
+      try {
+        openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${openAIApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-4.1-2025-04-14',
+            messages: [
+              { 
+                role: 'system', 
+                content: 'You are a technical blog writer who creates high-quality, informative content about web development and programming topics. Always respond with valid JSON.' 
+              },
+              { role: 'user', content: blogPrompt }
+            ],
+            max_tokens: 2000,
+            temperature: 0.7
+          }),
+        });
+
+        if (openAIResponse.ok) {
+          break; // Success, exit retry loop
+        }
+
+        // Handle specific error codes
+        if (openAIResponse.status === 429) {
+          const errorData = await openAIResponse.json().catch(() => ({}));
+          console.log(`Rate limit hit (attempt ${retryCount + 1}):`, errorData);
+          
+          if (retryCount < maxRetries - 1) {
+            const delay = Math.pow(2, retryCount) * 2000; // Exponential backoff: 2s, 4s, 8s
+            console.log(`Waiting ${delay}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            retryCount++;
+            continue;
+          }
+        }
+
+        // For other errors, get detailed error info
+        const errorText = await openAIResponse.text();
+        console.error('OpenAI API error:', {
+          status: openAIResponse.status,
+          statusText: openAIResponse.statusText,
+          body: errorText
+        });
+        throw new Error(`OpenAI API error: ${openAIResponse.status} - ${errorText}`);
+
+      } catch (fetchError) {
+        console.error('Network error calling OpenAI:', fetchError);
+        if (retryCount < maxRetries - 1) {
+          const delay = 1000 * (retryCount + 1);
+          console.log(`Network error, retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          retryCount++;
+          continue;
+        }
+        throw new Error(`Network error after ${maxRetries} attempts: ${fetchError.message}`);
+      }
+    }
+
+    if (!openAIResponse || !openAIResponse.ok) {
+      throw new Error(`Failed to generate content after ${maxRetries} attempts`);
     }
 
     const openAIData = await openAIResponse.json();
