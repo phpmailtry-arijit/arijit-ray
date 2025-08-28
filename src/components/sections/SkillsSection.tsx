@@ -48,12 +48,12 @@ export function SkillsSection() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      'Programming Languages': 'border-tech-blue text-tech-blue',
-      'Frontend Frameworks': 'border-tech-cyan text-tech-cyan',
-      'Backend Technologies': 'border-tech-green text-tech-green',
-      'Databases': 'border-tech-orange text-tech-orange',
-      'Cloud Platforms': 'border-neon-purple text-neon-purple',
-      'DevOps': 'border-neon-blue text-neon-blue',
+      'Programming Languages': 'border-primary-blue text-primary-blue',
+      'Frontend Frameworks': 'border-accent-teal text-accent-teal',
+      'Backend Technologies': 'border-primary-indigo text-primary-indigo',
+      'Databases': 'border-accent-purple text-accent-purple',
+      'Cloud Platforms': 'border-primary-blue text-primary-blue',
+      'DevOps': 'border-accent-teal text-accent-teal',
       'Soft Skills': 'border-primary text-primary',
     };
     return colors[category as keyof typeof colors] || 'border-primary text-primary';
@@ -96,7 +96,7 @@ export function SkillsSection() {
                     return (
                       <Card
                         key={skill.id}
-                        className="group bg-gradient-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-glow animate-fade-in"
+                        className="group glass-effect border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-professional animate-fade-in"
                         style={{ animationDelay: `${(categoryIndex * 0.2) + (skillIndex * 0.1)}s` }}
                       >
                         <CardContent className="p-6">

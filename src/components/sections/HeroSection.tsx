@@ -54,7 +54,7 @@ export function HeroSection() {
         {/* Main Content */}
         <div className="animate-scale-in-bounce">
           <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold mb-8 animate-slide-up-fade">
-            <span className="bg-gradient-primary bg-clip-text text-transparent animate-shimmer bg-[length:200%_100%] animate-magnetic">
+            <span className="bg-gradient-primary bg-clip-text text-transparent font-bold">
               {heroData.heading}
             </span>
           </h1>

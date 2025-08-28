@@ -44,10 +44,10 @@ export function AchievementsSection() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      award: 'bg-tech-orange text-white',
-      certification: 'bg-tech-blue text-white',
-      achievement: 'bg-tech-green text-white',
-      opensource: 'bg-tech-cyan text-white',
+      award: 'bg-accent-purple text-white',
+      certification: 'bg-primary-blue text-white',
+      achievement: 'bg-primary-indigo text-white',
+      opensource: 'bg-accent-teal text-white',
     };
     return colors[category as keyof typeof colors] || 'bg-primary text-primary-foreground';
   };
@@ -71,7 +71,7 @@ export function AchievementsSection() {
             return (
               <Card
                 key={achievement.id}
-                className="group bg-gradient-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-glow animate-fade-in"
+                className="group glass-effect border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-professional animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardContent className="p-6">
