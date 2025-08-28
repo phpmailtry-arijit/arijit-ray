@@ -8,61 +8,66 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Light mode colors */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
-    --primary: 263 70% 60%;
+    --primary: 20 14.3% 4.1%;
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 263 70% 70%;
 
-    --secondary: 240 9% 15%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
 
-    --muted: 240 9% 15%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
 
-    --accent: 263 70% 60%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 9% 15%;
-    --input: 240 9% 15%;
-    --ring: 263 70% 60%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 14.3% 4.1%;
 
     --radius: 0.75rem;
 
-    /* Tech portfolio specific colors */
-    --tech-blue: 217 91% 60%;
-    --tech-cyan: 189 100% 70%;
-    --tech-green: 142 76% 36%;
-    --tech-orange: 25 95% 60%;
-    --neon-purple: 263 70% 60%;
-    --neon-blue: 217 100% 70%;
-    --neon-cyan: 189 100% 70%;
+    /* Vibrant gradient colors for fancy effect */
+    --sunset-orange: 14 100% 62%;
+    --sunset-pink: 329 86% 70%;
+    --ocean-blue: 201 96% 32%;
+    --ocean-cyan: 187 85% 53%;
+    --forest-green: 142 76% 36%;
+    --electric-purple: 271 81% 56%;
+    --golden-yellow: 48 100% 67%;
+    --coral-red: 0 100% 67%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-tech: linear-gradient(135deg, hsl(var(--tech-blue)), hsl(var(--tech-cyan)));
-    --gradient-neon: linear-gradient(45deg, hsl(var(--neon-purple)), hsl(var(--neon-blue)), hsl(var(--neon-cyan)));
-    --gradient-card: linear-gradient(145deg, hsl(240 9% 8%), hsl(240 9% 12%));
+    /* Stunning gradients */
+    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset-orange)), hsl(var(--sunset-pink)));
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-blue)), hsl(var(--ocean-cyan)));
+    --gradient-electric: linear-gradient(45deg, hsl(var(--electric-purple)), hsl(var(--ocean-cyan)), hsl(var(--sunset-pink)));
+    --gradient-rainbow: linear-gradient(90deg, hsl(var(--sunset-orange)), hsl(var(--golden-yellow)), hsl(var(--forest-green)), hsl(var(--ocean-cyan)), hsl(var(--electric-purple)), hsl(var(--sunset-pink)));
+    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
 
-    /* Glows and shadows */
-    --glow-primary: 0 0 20px hsl(var(--primary) / 0.3);
-    --glow-neon: 0 0 30px hsl(var(--neon-purple) / 0.4);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-elevated: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    /* Advanced shadows and glows */
+    --glow-sunset: 0 0 40px hsl(var(--sunset-orange) / 0.4);
+    --glow-ocean: 0 0 40px hsl(var(--ocean-cyan) / 0.4);
+    --glow-electric: 0 0 60px hsl(var(--electric-purple) / 0.5);
+    --shadow-luxury: 0 32px 64px -12px rgba(0, 0, 0, 0.25);
+    --shadow-floating: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-neon: 0 0 30px hsl(var(--electric-purple) / 0.3);
 
-    /* Animations */
+    /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-elastic: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 240 10% 5%;
     --sidebar-foreground: 0 0% 98%;
@@ -75,33 +80,46 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    /* Dark mode gradients with enhanced vibrancy */
+    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset-orange)), hsl(var(--sunset-pink)));
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-blue)), hsl(var(--ocean-cyan)));
+    --gradient-electric: linear-gradient(45deg, hsl(var(--electric-purple)), hsl(var(--ocean-cyan)), hsl(var(--sunset-pink)));
+    --gradient-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+
+    /* Enhanced dark mode glows */
+    --glow-sunset: 0 0 60px hsl(var(--sunset-orange) / 0.6);
+    --glow-ocean: 0 0 60px hsl(var(--ocean-cyan) / 0.6);
+    --glow-electric: 0 0 80px hsl(var(--electric-purple) / 0.7);
+    --shadow-neon: 0 0 50px hsl(var(--electric-purple) / 0.5);
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -119,6 +137,113 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+}
+
+/* Advanced animations for fancy effects */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: var(--glow-electric); }
+  50% { box-shadow: var(--glow-sunset); }
+}
+
+@keyframes rainbow-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes magnetic-hover {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes text-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-rainbow {
+    background: var(--gradient-rainbow);
+    background-size: 400% 400%;
+    animation: rainbow-shift 3s ease infinite;
+  }
+  
+  .animate-magnetic {
+    transition: var(--transition-elastic);
+  }
+  
+  .animate-magnetic:hover {
+    animation: magnetic-hover 0.6s ease-in-out;
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background-size: 200% 100%;
+    animation: text-shimmer 2s infinite;
+  }
+  
+  .animate-slide-up-fade {
+    animation: slide-up-fade 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-scale-in-bounce {
+    animation: scale-in-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .glass-effect {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .gradient-text {
+    background: var(--gradient-electric);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
