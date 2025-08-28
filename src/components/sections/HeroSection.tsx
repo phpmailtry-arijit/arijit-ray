@@ -112,7 +112,7 @@ export function HeroSection() {
             </span>
           </h1>
           
-          <p key={heroData.subheading} className="text-2xl sm:text-3xl lg:text-4xl mb-6 font-light animate-slide-up-fade gradient-text" style={{ animationDelay: '0.2s' }}>
+          <p key={heroData.subheading} className="text-2xl sm:text-3xl lg:text-4xl mb-6 font-light animate-slide-up-fade text-foreground" style={{ animationDelay: '0.2s' }}>
             {heroData.subheading || 'NO SUBHEADING FOUND'}
             <span style={{fontSize: '12px', color: 'red'}}>DEBUG: {JSON.stringify(heroData.subheading)}</span>
           </p>
